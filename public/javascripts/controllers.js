@@ -1,21 +1,22 @@
-app.controller('main', function($scope){
+app.controller('main', function($scope, postsService){
 
-  $scope.arr = [
-    {
-      title: 'A title',
-      comments: [1,2,3],
-      author: 'James',
-      showCommentsBool: false,
-      voteCount: 2
-    },
-    {
-      title:'B Title ',
-      comments: [1],
-      author: 'Sasha',
-      showCommentsBool: false,
-      voteCount: 2
-    }
-  ]
+  $scope.newPostObj = {}
+    $scope.postFormBool = false;
+    $scope.sortType = '-voteCount'
+    $scope.sortDisplay = "Votes"
+
+    // $scope.newPost = function(obj) {
+      // console.log(obj)
+      postsService.newPost(obj).then(function(results) {
+        $scope.newPostObj = {}
+        $scope.postFormBool = false
+        $scope.postForm.$setPristine()
+      })
+    // }
+
+  postsService.getPosts().then(results => {
+      $scope.arr = results
+  })
 
 
   $scope.sortType = '-voteCount'
@@ -40,8 +41,8 @@ app.controller('main', function($scope){
 
 
   $scope.sortBy = function(input){
-    console.log('sortBy clicked');
-    $scope.sortType = input;
+    console.log('sortBy clicked')
+    $scope.sortType = input
     if (input == '-voteCount') {
       $scope.sortDisplay = 'Votes'
     } else {
